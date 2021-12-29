@@ -10,9 +10,14 @@ class Task extends Model
 {
     use HasFactory;
 
+    public const NOT_STARTED = 1;
+    public const STARTED = 2;
+    public const PENDING = 3;
+
     protected $fillable = [
         'title',
         'todo_list_id',
+        'status',
     ];
 
     public function todo_list(): BelongsTo
