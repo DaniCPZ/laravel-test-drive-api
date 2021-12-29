@@ -46,7 +46,8 @@ class TaskController extends Controller
             ],
         ]);
         $task->update([
-            'title' => $request->title,
+            'title' => $request->get('title', $task->title),
+            'status' => $request->get('status', $task->status),
         ]);
         return response($task);
     }
