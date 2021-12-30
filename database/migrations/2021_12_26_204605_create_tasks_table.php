@@ -17,6 +17,11 @@ class CreateTasksTable extends Migration
             $table->foreignId('todo_list_id')
                 ->constrained()
                 ->onDelete('cascade');
+
+            $table->foreignId('label_id')
+                ->nullable()
+                ->constrained();
+
             $table->tinyInteger('status')->default(Task::NOT_STARTED);
             $table->timestamps();
         });

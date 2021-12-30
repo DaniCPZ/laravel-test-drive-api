@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Label;
 use Tests\TestCase;
 use App\Models\Task;
 use App\Models\User;
@@ -21,8 +22,10 @@ class TaskTest extends TestCase
         Sanctum::actingAs($user);
 
         $this->list = TodoList::factory()->create();
+        $this->label = Label::factory()->create();
         $this->task = Task::factory()->create([
             'todo_list_id' => $this->list->id,
+            'label_id' => $this->label->id,
         ]);
     }
 
@@ -40,15 +43,33 @@ class TaskTest extends TestCase
     {
         $task = Task::factory()->make([
             'todo_list_id' => $this->list->id,
+            'label_id' => $this->label->id,
         ]);
 
         $this->postJson(route('todo-list.tasks.store', $this->list->id), [
             'title' => $task->title,
+            'label_id' => $task->label_id,
         ])->assertCreated();
 
         $this->assertDatabaseHas('tasks', [
             'title' => $task->title,
             'todo_list_id' => $task->todo_list_id,
+            'label_id' => $task->label_id,
+        ]);
+    }
+
+    public function test_store_a_task_for_a_todo_list_without_a_label()
+    {
+        $task = Task::factory()->make();
+
+        $this->postJson(route('todo-list.tasks.store', $this->list->id), [
+            'title' => $task->title
+        ])->assertCreated();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $task->title,
+            'todo_list_id' => $this->list->id,
+            'label_id' => null
         ]);
     }
 
