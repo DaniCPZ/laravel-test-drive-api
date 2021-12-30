@@ -18,6 +18,7 @@ class Task extends Model
         'title',
         'todo_list_id',
         'status',
+        'description',
     ];
 
     public function todo_list(): BelongsTo

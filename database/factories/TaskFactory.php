@@ -11,6 +11,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
             'todo_list_id' => function(){
                 return TodoList::factory()->create()->id;
             }
