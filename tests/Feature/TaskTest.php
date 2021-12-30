@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\TodoList;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class TaskTest extends TestCase
 {
@@ -15,6 +17,9 @@ class TaskTest extends TestCase
     public function setUp(): void
     {
     	parent::setUp();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
         $this->list = TodoList::factory()->create();
         $this->task = Task::factory()->create([
             'todo_list_id' => $this->list->id,
