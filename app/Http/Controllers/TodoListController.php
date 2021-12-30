@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TodoListRequest;
 use App\Models\TodoList;
+use Auth;
 use Illuminate\Http\Response;
 
 class TodoListController extends Controller
 {
     public function index()
     {
-        $lists = TodoList::all();
+        $lists = Auth::user()->todo_lists;
         return response($lists);
     }
 
@@ -21,7 +22,9 @@ class TodoListController extends Controller
 
     public function store(TodoListRequest $request)
     {
-        $list = TodoList::create($request->validated());
+        $list = Auth::user()
+            ->todo_lists()
+            ->create($request->validated());
 
     	return response($list, 201);
     }

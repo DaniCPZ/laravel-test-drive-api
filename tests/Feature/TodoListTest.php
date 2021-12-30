@@ -14,20 +14,24 @@ class TodoListTest extends TestCase
     use RefreshDatabase;
 
     private TodoList $list;
+    private User $user;
 
     public function setUp(): void
     {
     	parent::setUp();
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-        $this->list = TodoList::factory()->create();
+        $this->user = User::factory()->create();
+        Sanctum::actingAs($this->user);
+        $this->list = TodoList::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
     }
 
     public function test_index_todo_list()
     {
+        TodoList::factory()->create();
         $response = $this->getJson(route('todo-list.index'));
 
-        $this->assertEquals($this->list->count(), count($response->json()));
+        $this->assertEquals(1, count($response->json()));
     }
 
     public function test_fetch_single_todo_list()
