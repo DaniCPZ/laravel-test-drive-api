@@ -5,6 +5,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\TodoListController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\WebServiceController;
 use App\Http\Controllers\Auth\RegisterController;
 
 Route::middleware('auth:sanctum')->group(function(){
@@ -15,6 +16,10 @@ Route::middleware('auth:sanctum')->group(function(){
         ->shallow();
 
     Route::apiResource('label', LabelController::class);
+
+    Route::get('/web-service/connect/{name}', [WebServiceController::class, 'connect'])->name('web-service.connect');
+    Route::post('/web-service/callback', [WebServiceController::class, 'callback'])->name('web-service.callback');
+    Route::post('/web-service/{web_service}', [WebServiceController::class, 'store'])->name('web-service.store');
 });
 
 Route::post('/register', RegisterController::class)->name('user.register');
